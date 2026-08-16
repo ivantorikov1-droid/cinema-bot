@@ -117,11 +117,29 @@ QUIZ_QUESTIONS = [
 ]
 
 CHARACTERS = {
-    "shrek": {"name": "🧅 ТЫ — ШРЕК!", "desc": "Ты ценишь личные границы и уют. Снаружи ворчливый, но внутри преданный друг.", "image": "https://upload.wikimedia.org/wikipedia/ru/3/39/Shrek.jpg"},
-    "donkey": {"name": "🧇 ТЫ — ОСЕЛ!", "desc": "Душа компании! Оптимизм пробивает стены, а твоей смелости позавидует любой.", "image": "https://upload.wikimedia.org/wikipedia/ru/b/b3/Donkey_%28Shrek%29.png"},
-    "puss": {"name": "😼 ТЫ — КОТ В САПОГАХ!", "desc": "Невероятно харизматичный. Когда надо — строишь глазки, когда доходит до дела — достаешь шпагу.", "image": "https://upload.wikimedia.org/wikipedia/ru/0/05/Puss_in_Boots_%28Shrek%29.png"},
-    "farquaad": {"name": "👑 ТЫ — ЛОРД ФАРКУАД!", "desc": "Человек грандиозных амбиций! Тебе нужны идеальные стандарты, все должны подчиняться твоим правилам.", "image": "https://upload.wikimedia.org/wikipedia/ru/9/91/LordFarquaad.png"}
+    "shrek": {
+        "name": "🧅 ТЫ — ШРЕК!",
+        "desc": "Ты ценишь личные границы и уют. Снаружи ворчливый, но внутри преданный друг.",
+        "image": "https://i.ibb.co/3sBw7W1/shrek.jpg"
+    },
+    "donkey": {
+        "name": "🧇 ТЫ — ОСЕЛ!",
+        "desc": "Душа компании! Оптимизм пробивает стены, а твоей смелости позавидует любой.",
+        "image": "https://i.ibb.co/y4L2qT7/donkey.jpg"
+    },
+    "puss": {
+        "name": "😼 ТЫ — КОТ В САПОГАХ!",
+        "desc": "Невероятно харизматичный. Когда надо — строишь глазки, когда доходит до дела — достаешь шпагу.",
+        "image": "https://i.ibb.co/h7n1h3k/puss.jpg"
+    },
+    "farquaad": {
+        "name": "👑 ТЫ — ЛОРД ФАРКУАД!",
+        "desc": "Человек грандиозных амбиций! Тебе нужны идеальные стандарты, все должны подчиняться твоим правилам.",
+        "image": "https://i.ibb.co/q1zRk5p/farquaad.jpg"
+    }
 }
+
+
 
 def start_quiz(chat_id):
     user_quiz_state[chat_id] = {"q_index": 0, "scores": {"shrek": 0, "donkey": 0, "puss": 0, "farquaad": 0}}
