@@ -1,4 +1,4 @@
-import os
+    import os
 import random
 import requests
 import telebot
@@ -13,7 +13,7 @@ app = Flask('')
 
 @app.route('/')
 def home():
-    return "Бот работает 24/7 (Pro + Рассылка)!"
+    return "Бот работает 24/7 (Меню Жанров + Сериалы + Собачки)!"
 
 def run():
     port = int(os.environ.get('PORT', 3000))
@@ -46,6 +46,31 @@ CINEMA_FACTS = [
     {"movie": "🎬 Пираты Карибского моря", "fact": "Продюсеры Disney всерьез думали, что Джонни Депп пьян или сошел с ума из-за его манер и походки."},
 ]
 
+# --- БАЗА ПИНТЕРЕСТ-СОБАК ---
+# Сюда можно добавлять прямые ссылки на картинки (jpeg, png) и смешные подписи
+FUNNY_DOGS = [
+    {
+        "url": "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=800",
+        "caption": "Когда надел свое лучшее смарт-кэжуал пальто, но тебя всё равно назвали просто «хорошим мальчиком» 🧥"
+    },
+    {
+        "url": "https://images.unsplash.com/photo-1561037404-61cd46aa615b?auto=format&fit=crop&q=80&w=800",
+        "caption": "Этот парень явно планирует дзен-поездку к горе Фудзи, не мешайте ему 🌸🗻"
+    },
+    {
+        "url": "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=800",
+        "caption": "Лицо того, кто только что с треском проиграл в Монополию, но ему всё простят, потому что у него лапки 🎲🐶"
+    },
+    {
+        "url": "https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&q=80&w=800",
+        "caption": "Готов к пятничному киномарафону больше, чем ты 🍿"
+    },
+    {
+        "url": "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&q=80&w=800",
+        "caption": "Случайно включил фронтальную камеру во время просмотра триллера 😱"
+    }
+]
+
 # --- СОХРАНЕНИЕ ПОЛЬЗОВАТЕЛЕЙ ДЛЯ РАССЫЛКИ ---
 USERS_FILE = 'users.txt'
 
@@ -68,10 +93,7 @@ def get_all_users():
 # --- ФОНОВАЯ РАССЫЛКА (НАПОМИНАНИЯ) ---
 def reminder_loop():
     while True:
-        # Получаем время (UTC + 3 часа = Москва)
         now = datetime.datetime.utcnow() + datetime.timedelta(hours=3)
-        
-        # 4 = Пятница, 5 = Суббота. Время: 19:00
         if now.weekday() in [4, 5] and now.hour == 19 and now.minute == 0:
             users = get_all_users()
             for user_id in users:
@@ -85,14 +107,10 @@ def reminder_loop():
                     )
                 except Exception as e:
                     print(f"Не удалось отправить {user_id}: {e}")
-            
-            # Спим 61 секунду, чтобы не отправить сообщение дважды за одну минуту
             time.sleep(61)
         else:
-            # Проверяем время каждые 30 секунд
             time.sleep(30)
 
-# Запускаем таймер рассылки в отдельном фоновом потоке
 Thread(target=reminder_loop, daemon=True).start()
 
 # --- ТЕСТ: КТО ТЫ ИЗ ШРЕКА ---
@@ -117,29 +135,11 @@ QUIZ_QUESTIONS = [
 ]
 
 CHARACTERS = {
-    "shrek": {
-        "name": "🧅 ТЫ — ШРЕК!",
-        "desc": "Ты ценишь личные границы и уют. Снаружи ворчливый, но внутри преданный друг.",
-        "image": "https://i.ibb.co/3sBw7W1/shrek.jpg"
-    },
-    "donkey": {
-        "name": "🧇 ТЫ — ОСЕЛ!",
-        "desc": "Душа компании! Оптимизм пробивает стены, а твоей смелости позавидует любой.",
-        "image": "https://i.ibb.co/y4L2qT7/donkey.jpg"
-    },
-    "puss": {
-        "name": "😼 ТЫ — КОТ В САПОГАХ!",
-        "desc": "Невероятно харизматичный. Когда надо — строишь глазки, когда доходит до дела — достаешь шпагу.",
-        "image": "https://i.ibb.co/h7n1h3k/puss.jpg"
-    },
-    "farquaad": {
-        "name": "👑 ТЫ — ЛОРД ФАРКУАД!",
-        "desc": "Человек грандиозных амбиций! Тебе нужны идеальные стандарты, все должны подчиняться твоим правилам.",
-        "image": "https://i.ibb.co/q1zRk5p/farquaad.jpg"
-    }
+    "shrek": {"name": "🧅 ТЫ — ШРЕК!", "desc": "Ты ценишь личные границы и уют. Снаружи ворчливый, но внутри преданный друг.", "image": "https://i.ibb.co/3sBw7W1/shrek.jpg"},
+    "donkey": {"name": "🧇 ТЫ — ОСЕЛ!", "desc": "Душа компании! Оптимизм пробивает стены, а твоей смелости позавидует любой.", "image": "https://i.ibb.co/y4L2qT7/donkey.jpg"},
+    "puss": {"name": "😼 ТЫ — КОТ В САПОГАХ!", "desc": "Невероятно харизматичный. Когда надо — строишь глазки, когда доходит до дела — достаешь шпагу.", "image": "https://i.ibb.co/h7n1h3k/puss.jpg"},
+    "farquaad": {"name": "👑 ТЫ — ЛОРД ФАРКУАД!", "desc": "Человек грандиозных амбиций! Тебе нужны идеальные стандарты, все должны подчиняться твоим правилам.", "image": "https://i.ibb.co/q1zRk5p/farquaad.jpg"}
 }
-
-
 
 def start_quiz(chat_id):
     user_quiz_state[chat_id] = {"q_index": 0, "scores": {"shrek": 0, "donkey": 0, "puss": 0, "farquaad": 0}}
@@ -177,21 +177,38 @@ def finish_quiz(chat_id, message_id):
 def get_movie_from_api(category="random"):
     url = "https://api.kinopoisk.dev/v1.4/movie/random"
     headers = {"X-API-KEY": KINO_TOKEN}
-    params = {"type": "movie", "rating.kp": "6.5-10", "notNullFields": ["name", "description", "poster.url"]}
+    params = {
+        "rating.kp": "6.5-10", 
+        "notNullFields": ["name", "description", "poster.url"]
+    }
+    
+    if category == "series": params["type"] = "tv-series"
+    else: params["type"] = "movie"
+        
     if category == "new": params["year"] = "2024-2026"
     elif category in GENRES: params["genres.name"] = GENRES[category]
+    
     try:
         response = requests.get(url, headers=headers, params=params, timeout=10)
         if response.status_code == 200: return response.json()
     except Exception as e: print("Ошибка API:", e)
     return None
 
+# --- КЛАВИАТУРЫ ---
 def get_main_menu_keyboard():
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     markup.add(types.KeyboardButton("🎲 Любой фильм"), types.KeyboardButton("🔥 Новинки"))
+    markup.add(types.KeyboardButton("🎭 Выбрать по жанру"), types.KeyboardButton("📺 Сериалы"))
+    markup.add(types.KeyboardButton("🧠 Кинофакт на вечер"), types.KeyboardButton("🧅 Тест: Кто ты из Шрека?"))
+    markup.add(types.KeyboardButton("🐶 Собачка дня"))
+    return markup
+
+def get_genres_keyboard():
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     markup.add(types.KeyboardButton("💥 Боевик"), types.KeyboardButton("😂 Комедия"))
     markup.add(types.KeyboardButton("🍿 Триллер"), types.KeyboardButton("🚀 Фантастика"))
-    markup.add(types.KeyboardButton("🧠 Кинофакт на вечер"), types.KeyboardButton("🧅 Тест: Кто ты из Шрека?"))
+    markup.add(types.KeyboardButton("😱 Ужасы"), types.KeyboardButton("😢 Драма"))
+    markup.add(types.KeyboardButton("⬅️ Назад в меню"))
     return markup
 
 def get_fact_keyboard():
@@ -199,16 +216,30 @@ def get_fact_keyboard():
     markup.add(types.InlineKeyboardButton("🔄 Еще один факт", callback_data="next_fact"))
     return markup
 
+def get_dog_keyboard():
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("🔄 Хочу другую собачку", callback_data="next_dog"))
+    return markup
+
+# --- ФУНКЦИИ ОТПРАВКИ ---
 def send_fact(chat_id):
     fact_data = random.choice(CINEMA_FACTS)
     text = f"💡 *{fact_data['movie']}*\n\n{fact_data['fact']}"
     bot.send_message(chat_id, text, parse_mode="Markdown", reply_markup=get_fact_keyboard())
 
+def send_dog(chat_id):
+    dog_data = random.choice(FUNNY_DOGS)
+    try:
+        bot.send_photo(chat_id, dog_data['url'], caption=dog_data['caption'], reply_markup=get_dog_keyboard())
+    except Exception as e:
+        bot.send_message(chat_id, "Ой, песель куда-то убежал! Попробуй еще раз.", reply_markup=get_dog_keyboard())
+
 def send_movie(chat_id, category):
-    msg = bot.send_message(chat_id, "⏳ Подбираю идеальный фильм...")
+    msg = bot.send_message(chat_id, "⏳ Ищу в базе...")
     movie = get_movie_from_api(category)
     try: bot.delete_message(chat_id, msg.message_id)
     except: pass
+    
     if movie:
         title = movie.get('name') or movie.get('alternativeName') or 'Без названия'
         year = movie.get('year', '')
@@ -218,49 +249,72 @@ def send_movie(chat_id, category):
         kp_id = movie.get('id')
         genres_list = [g.get('name') for g in movie.get('genres', []) if g.get('name')]
         genres_str = ", ".join(genres_list[:3]) if genres_list else "Кино"
+        
+        media_type = "📺 Сериал" if category == "series" else "🍿 Фильм"
+        
         if len(desc) > 650: desc = desc[:650] + "..."
-        text = f"🍿 *{title}* ({year})\n⭐️ *Рейтинг Кинопоиска:* {rating}\n🎭 *Жанр:* {genres_str}\n\n📝 *Описание:*\n{desc}"
+        text = f"{media_type}: *{title}* ({year})\n⭐️ *Рейтинг Кинопоиска:* {rating}\n🎭 *Жанр:* {genres_str}\n\n📝 *Описание:*\n{desc}"
+        
         markup = types.InlineKeyboardMarkup(row_width=1)
-        markup.add(types.InlineKeyboardButton("🔄 Выдать другой фильм", callback_data=f"next_{category}"))
-        if kp_id: markup.add(types.InlineKeyboardButton("🎬 Открыть на Кинопоиске", url=f"https://www.kinopoisk.ru/film/{kp_id}/"))
+        btn_text = "🔄 Выдать другой сериал" if category == "series" else "🔄 Выдать другой фильм"
+        markup.add(types.InlineKeyboardButton(btn_text, callback_data=f"next_{category}"))
+        
+        if kp_id: 
+            url_type = "series" if category == "series" else "film"
+            markup.add(types.InlineKeyboardButton("🎬 Открыть на Кинопоиске", url=f"https://www.kinopoisk.ru/{url_type}/{kp_id}/"))
+            
         if poster:
             try: bot.send_photo(chat_id, poster, caption=text, parse_mode="Markdown", reply_markup=markup)
             except: bot.send_message(chat_id, text, parse_mode="Markdown", reply_markup=markup)
         else:
             bot.send_message(chat_id, text, parse_mode="Markdown", reply_markup=markup)
     else:
-        bot.send_message(chat_id, "Не удалось найти подходящий фильм. Попробуй ещё раз!")
+        bot.send_message(chat_id, "Не удалось найти ничего подходящего. Попробуй ещё раз!")
 
+# --- ОБРАБОТЧИКИ СООБЩЕНИЙ ---
 @bot.message_handler(commands=['start'])
 def start_command(message):
-    save_user(message.chat.id) # <--- Запоминаем пользователя!
-    text = "Добро пожаловать! Выбирай жанр фильма, зацени кинофакт или пройди тест 👇"
+    save_user(message.chat.id)
+    text = "Добро пожаловать! Выбирай жанр фильма, сериал или пройди тест 👇"
     bot.send_message(message.chat.id, text, reply_markup=get_main_menu_keyboard())
 
 @bot.message_handler(func=lambda message: True)
 def handle_menu_buttons(message):
-    save_user(message.chat.id) # <--- Запоминаем пользователя при любом нажатии!
+    save_user(message.chat.id)
     text = message.text
+    
+    # Главное меню
     if text == "🎲 Любой фильм": send_movie(message.chat.id, "random")
     elif text == "🔥 Новинки": send_movie(message.chat.id, "new")
+    elif text == "📺 Сериалы": send_movie(message.chat.id, "series")
+    elif text == "🧠 Кинофакт на вечер": send_fact(message.chat.id)
+    elif text == "🧅 Тест: Кто ты из Шрека?": start_quiz(message.chat.id)
+    elif text == "🐶 Собачка дня": send_dog(message.chat.id)
+    elif text == "🎭 Выбрать по жанру":
+        bot.send_message(message.chat.id, "Выбирай жанр 👇", reply_markup=get_genres_keyboard())
+    elif text == "⬅️ Назад в меню":
+        bot.send_message(message.chat.id, "Главное меню", reply_markup=get_main_menu_keyboard())
+        
+    # Жанры
     elif text == "💥 Боевик": send_movie(message.chat.id, "action")
     elif text == "😂 Комедия": send_movie(message.chat.id, "comedy")
     elif text == "🍿 Триллер": send_movie(message.chat.id, "thriller")
     elif text == "🚀 Фантастика": send_movie(message.chat.id, "scifi")
-    elif text == "🧠 Кинофакт на вечер": send_fact(message.chat.id)
-    elif text == "🧅 Тест: Кто ты из Шрека?": start_quiz(message.chat.id)
+    elif text == "😱 Ужасы": send_movie(message.chat.id, "horror")
+    elif text == "😢 Драма": send_movie(message.chat.id, "drama")
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_callbacks(call):
     chat_id = call.message.chat.id
     message_id = call.message.message_id
     data = call.data
-    save_user(chat_id) # <--- Запоминаем пользователя при нажатии на inline кнопки
+    save_user(chat_id)
     
     try: bot.answer_callback_query(call.id)
     except: pass
     
     if data == "next_fact": send_fact(chat_id)
+    elif data == "next_dog": send_dog(chat_id)
     elif data.startswith("next_"):
         category = data.replace("next_", "")
         send_movie(chat_id, category)
@@ -278,6 +332,5 @@ def handle_callbacks(call):
             else: finish_quiz(chat_id, message_id)
 
 keep_alive()
-print("PRO Бот обновлен: добавлена авторассылка по пятницам и субботам!")
+print("PRO Бот обновлен: добавлена Собачка дня!")
 bot.infinity_polling()
-
