@@ -13,7 +13,7 @@ app = Flask('')
 
 @app.route('/')
 def home():
-    return "Бот работает 24/7 (Меню Жанров + Сериалы + Собачки)!"
+    return "Бот работает 24/7 (Меню Жанров + Сериалы + Собачечки)!"
 
 def run():
     port = int(os.environ.get('PORT', 3000))
